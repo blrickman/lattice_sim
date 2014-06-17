@@ -11,7 +11,7 @@ my $debug = 0;
 
 sub func {
   my ($x,$y) = @_;
-  my $func = $x * $y;
+  my $func = $x + exp(-$y**2);
   return $func unless $debug;
   return ($func,3*$x**2 * $y**4,4*$x**3 * $y**3);
 }
