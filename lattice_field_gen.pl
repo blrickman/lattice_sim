@@ -3,13 +3,60 @@
 use strict;
 use warnings;
 use PDL;
+use Tie::File;
 
 my $debug = 0;
 
 my $fn = shift;
-open my $FH, '<' . $fn  or die "Can't open file $fn: $!";
-open my $OUT, '>' . "lattice_field.dat" or die $!;
+my (undef,$zi,$zf,$zs,$yi,$yf,$ys) = split '_', $fn;
+$ys =~ s/\.\w+$//;
+
+tie my @datafile, 'Tie::File', $fn  or die "Can't open file $fn: $!";
+open my $FIELDZ, '>' . "fieldz-" . $fn or die $!;
+open my $FIELDY, '>' . "fieldy-" . $fn or die $!;
 open my $TEST, '>' . "compare_fields.dat" or die $! if $debug;
+
+my $z_rows = ($zf-$zi)/$zs;
+my $y_cols = ($yf-$yi)/$ys;
+
+for my $z (1..$z_rows-1) {
+  for my $y (1..$y_cols-1) {
+    
+  }
+}
+
+sub val_to_pot {
+  my ($z,$y) = @_;
+  my @row = split ', ', $datafile[val_to_elem($z,$zi,$zs)];
+  return $row[element($y,$yi,$ys)];
+}
+
+
+sub val_to_elem {
+  my ($x, $x0, $step) = @_;
+  return int ($x-$x0)/$step;
+}
+
+sub avg_div {
+  my ($i,$j) = @_;
+  my (@pz, @py);
+  for ($i-1..$i+1) {
+    $pz[$_-$i+1] = pdl ($z[$_], $potential{$z[$_]}{$y[$j]}, $z[$_]**2);
+  }
+  for ($j-1..$j+1) {
+    $py[$_-$j+1] = pdl ($y[$_], $potential{$z[$i]}{$y[$_]}, $y[$_]**2);
+  } 
+  my $nz = crossp($pz[1] - $pz[0], $pz[2] - $pz[0]);
+  my $ny = crossp($py[1] - $py[0], $py[2] - $py[0]);
+  $nz /= -$nz->index(1);
+  $ny /= -$ny->index(1);
+  return { 
+    'z' => 2 * $nz->index(2) * $z[$i] + $nz->index(0),
+    'y' => 2 * $ny->index(2) * $y[$j] + $ny->index(0),
+  }
+}
+
+__END__
 
 my %potential;
 my %efield_d;
@@ -35,23 +82,4 @@ for my $i (1..@z-2) {
   }
   print $OUT "\n";
   print $TEST "\n" if $debug;
-}
-
-sub avg_div {
-  my ($i,$j) = @_;
-  my (@pz, @py);
-  for ($i-1..$i+1) {
-    $pz[$_-$i+1] = pdl ($z[$_], $potential{$z[$_]}{$y[$j]}, $z[$_]**2);
-  }
-  for ($j-1..$j+1) {
-    $py[$_-$j+1] = pdl ($y[$_], $potential{$z[$i]}{$y[$_]}, $y[$_]**2);
-  } 
-  my $nz = crossp($pz[1] - $pz[0], $pz[2] - $pz[0]);
-  my $ny = crossp($py[1] - $py[0], $py[2] - $py[0]);
-  $nz /= -$nz->index(1);
-  $ny /= -$ny->index(1);
-  return { 
-    'z' => 2 * $nz->index(2) * $z[$i] + $nz->index(0),
-    'y' => 2 * $ny->index(2) * $y[$j] + $ny->index(0),
-  }
 }
