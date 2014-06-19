@@ -18,7 +18,7 @@ open my $FIELDY, '>' . "fieldy-" . $fn or die $!;
 open my $TEST, '>' . "compare_fields.dat" or die $! if $debug;
 
 my $z_rows = ($zf-$zi)/$zs;
-my $y_cols = ($yf-$yi)/$ys;
+my $y_cols = ($yf-$yi)/$ys;  
 
 for my $i (1..$z_rows-1) {
   for my $j (1..$y_cols-1) {
@@ -65,8 +65,8 @@ sub ij_Ezy {
   } 
   my $nz = crossp($pz[1] - $pz[0], $pz[2] - $pz[0]);
   my $ny = crossp($py[1] - $py[0], $py[2] - $py[0]);
-  $nz /= -$nz->index(1);
-  $ny /= -$ny->index(1);
+  $nz /= $nz->index(1);
+  $ny /= $ny->index(1);
   return (2 * $nz->index(2) * $z + $nz->index(0), 2 * $ny->index(2) * $y + $ny->index(0))
 }
 
