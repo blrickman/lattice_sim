@@ -20,9 +20,6 @@ open my $TEST, '>' . "compare_fields.dat" or die $! if $debug;
 my $z_rows = ($zf-$zi)/$zs;
 my $y_cols = ($yf-$yi)/$ys;
 
-print join( ", ", ij_Ezy(10,23)) . "\n";
-
-
 for my $i (1..$z_rows-1) {
   for my $j (1..$y_cols-1) {
     my ($Ez,$Ey) = ij_Ezy($i,$j);
