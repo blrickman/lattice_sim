@@ -12,6 +12,7 @@ my (undef,$zi,$zf,$zs,$yi,$yf,$ys) = split '_', $fn;
 $ys =~ s/\.\w+$//;
 
 tie my @datafile, 'Tie::File', $fn  or die "Can't open file $fn: $!";
+
 open my $FIELDZ, '>' . "fieldz-" . $fn or die $!;
 open my $FIELDY, '>' . "fieldy-" . $fn or die $!;
 open my $TEST, '>' . "compare_fields.dat" or die $! if $debug;
@@ -19,13 +20,17 @@ open my $TEST, '>' . "compare_fields.dat" or die $! if $debug;
 my $z_rows = ($zf-$zi)/$zs;
 my $y_cols = ($yf-$yi)/$ys;
 
-print join( ", ", ij_Ezy(190,23)) . "\n";
+print join( ", ", ij_Ezy(10,23)) . "\n";
 
 
-for my $z (1..$z_rows-1) {
-  for my $y (1..$y_cols-1) {
-    
+for my $i (1..$z_rows-1) {
+  for my $j (1..$y_cols-1) {
+    my ($Ez,$Ey) = ij_Ezy($i,$j);
+    print $FIELDZ sprintf("%.16f", $Ez) . ", ";
+    print $FIELDY sprintf("%.16f", $Ey) . ", ";
   }
+  print $FIELDZ "\n";
+  print $FIELDY "\n";
 }
 
 sub zy_pot {
