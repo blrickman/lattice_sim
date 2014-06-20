@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 my $step = 1;
-my ($xi,$xf) = (0,100);
+my ($xi,$xf) = (0,1000);
 my ($yi,$yf) = (0,100);
 
 my $debug = 0;

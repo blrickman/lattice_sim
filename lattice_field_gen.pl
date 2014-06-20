@@ -23,8 +23,8 @@ open my $TEST, '>' . "compare_fields.dat" or die $! if $debug;
 my $z_rows = ($zf-$zi)/$zs;
 my $y_cols = ($yf-$yi)/$ys;  
 
-for my $i (1..$z_rows-1) {
-  for my $j (1..$y_cols-1) {
+for my $i (1..$z_rows+1) {
+  for my $j (1..$y_cols+1) {
     my ($Ez,$Ey) = ij_Ezy($i,$j);
     print $FIELDZ sprintf("%.16f", $Ez) . ", ";
     print $FIELDY sprintf("%.16f", $Ey) . ", ";
