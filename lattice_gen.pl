@@ -4,15 +4,15 @@ use strict;
 use warnings;
 
 my $step = 1;
-my ($xi,$xf) = (0,1000);
+my ($xi,$xf) = (0,100);
 my ($yi,$yf) = (0,100);
 
 my $debug = 0;
-my $dec = 3;
+my $dec = 16;
 
 sub func {
   my ($x,$y) = @_;
-  my $func = $x + $y/1000;
+  my $func = $x**2/2 + $y**2/2000;
   return $func unless $debug;
   return ($func,3*$x**2 * $y**4,4*$x**3 * $y**3);
 }
