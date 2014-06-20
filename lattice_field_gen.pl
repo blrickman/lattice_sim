@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use PDL;
 use Tie::File;
+use Time::HiRes qw/gettimeofday tv_interval/;
+
+my $t0 = [gettimeofday];
 
 my $debug = 0;
 
@@ -29,6 +32,7 @@ for my $i (1..$z_rows-1) {
   print $FIELDZ "\n";
   print $FIELDY "\n";
 }
+print tv_interval ( $t0 ) . "\n";
 
 sub zy_pot {
   return ij_pot(zy_ij(@_));
@@ -38,7 +42,6 @@ sub ij_pot {
   my ($i,$j) = @_;
   my @row = split ', ', $datafile[$i];
   return $row[$j];
-
 }
 
 sub ij_zy {
