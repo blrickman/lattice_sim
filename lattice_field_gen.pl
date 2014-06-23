@@ -7,15 +7,16 @@ use Tie::File;
 use Time::HiRes qw/gettimeofday tv_interval/;
 
 my $t0 = [gettimeofday];
-
 my $debug = 0;
 
 my $fn = shift;
 my (undef,$zi,$zf,$zs,$yi,$yf,$ys) = split '_', $fn;
 $ys =~ s/\.\w+$//;
-
 tie my @datafile, 'Tie::File', $fn  or die "Can't open file $fn: $!";
 
+$zi += $zs; $zf -= $zs;
+$yi += $ys; $yf -= $ys;
+$fn = join("_", ($zi,$zf,$zs,$yi,$yf,$ys)) . ".dat";
 open my $FIELDZ, '>' . "fieldz-" . $fn or die $!;
 open my $FIELDY, '>' . "fieldy-" . $fn or die $!;
 open my $TEST, '>' . "compare_fields.dat" or die $! if $debug;

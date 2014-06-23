@@ -4,8 +4,8 @@ use strict;
 use warnings;
 
 my $step = 1;
-my ($xi,$xf) = (0,100);
-my ($yi,$yf) = (0,100);
+my ($xi,$xf) = (-1,101);
+my ($yi,$yf) = (-1,101);
 
 my $debug = 0;
 my $dec = 16;
@@ -19,9 +19,9 @@ sub func {
 
 open my $FH, "> lattice_$xi\_$xf\_$step\_$yi\_$yf\_$step.dat";
 
-for my $x (-1..($xf-$xi)/$step+1) {
+for my $x (0..($xf-$xi)/$step) {
   $x = $xi + $x*$step;
-  for my $y (-1..($yf-$yi)/$step+1) {
+  for my $y (0..($yf-$yi)/$step) {
     $y = $yi + $y*$step;
      print $FH sprintf("%2.${dec}f", func($x,$y)) . ", ";
   }
